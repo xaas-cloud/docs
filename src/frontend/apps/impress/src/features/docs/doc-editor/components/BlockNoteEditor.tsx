@@ -17,8 +17,9 @@ import { css } from 'styled-components';
 import * as Y from 'yjs';
 
 import { Box, TextErrors } from '@/components';
+import { useCunninghamTheme } from '@/cunningham';
 import { Doc, useIsCollaborativeEditable } from '@/docs/doc-management';
-import { useAuth } from '@/features/auth';
+import { avatarUrlFromName, useAuth } from '@/features/auth';
 import { useResponsiveStore } from '@/stores';
 
 import {
@@ -82,6 +83,7 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
   const { user } = useAuth();
   const { setEditor } = useEditorStore();
   const { t } = useTranslation();
+  const { themeTokens } = useCunninghamTheme();
   const { isDesktop } = useResponsiveStore();
 
   const { isEditable, isLoading } = useIsCollaborativeEditable(doc);
@@ -95,12 +97,15 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
 
   const { uploadFile, errorAttachment } = useUploadFile(doc.id);
 
-  const collabName = readOnly
-    ? 'Reader'
-    : user?.full_name || user?.email || t('Anonymous');
+  const collabName = user?.full_name || user?.email;
+  const cursorName = readOnly ? 'Reader' : collabName || t('Anonymous');
   const showCursorLabels: 'always' | 'activity' | (string & {}) = 'activity';
 
   const threadStore = useComments(doc, user);
+
+  const currentUserAvatarUrl = canSeeComment
+    ? avatarUrlFromName(collabName, themeTokens?.font?.families?.base)
+    : undefined;
 
   const editor: DocsBlockNoteEditor = useCreateBlockNote(
     {
@@ -109,7 +114,7 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
         provider,
         fragment: provider.document.getXmlFragment('document-store'),
         user: {
-          name: collabName,
+          name: cursorName,
           color: randomColor(),
         },
         /**
@@ -168,7 +173,10 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
             return {
               id: encodedURIUserId,
               username: fullName || t('Anonymous'),
-              avatarUrl: 'https://i.pravatar.cc/300',
+              avatarUrl: avatarUrlFromName(
+                fullName,
+                themeTokens?.font?.families?.base,
+              ),
             };
           }),
         );
@@ -182,7 +190,7 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
       uploadFile,
       schema: blockNoteSchema,
     },
-    [collabName, lang, provider, uploadFile, threadStore],
+    [cursorName, lang, provider, uploadFile, threadStore],
   );
 
   useHeadings(editor);
@@ -203,7 +211,7 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
       $background="white"
       $css={css`
         ${cssEditor(readOnly)};
-        ${cssComments(canSeeComment)}
+        ${cssComments(canSeeComment, currentUserAvatarUrl)}
       `}
       className="--docs--editor-container"
     >
