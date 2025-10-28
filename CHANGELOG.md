@@ -21,6 +21,7 @@ and this project adheres to
 - 🐛(frontend) fix duplicate document entries in grid #1479
 - 🐛(frontend) show full nested doc names with ajustable bar #1456
 - 🐛(backend) fix trashbin list
+- 🐛(docx) fix image overflow by limiting width to 600px during export #1525
 - ♿(frontend) improve accessibility:
   - ♿(frontend) remove empty alt on logo due to Axe a11y error #1516
 
