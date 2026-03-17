@@ -3,6 +3,15 @@ entries:
   docs:
   - apiVersion: v2
     appVersion: latest
+    created: "2026-03-17T01:39:49.733065274Z"
+    digest: 1d25468377c1071f4ab59241068f3a6192c0247ffce7e95ae17c504c056ea1b0
+    name: docs
+    type: application
+    urls:
+    - https://xaas-cloud.github.io/docs/docs-4.8.0.tgz
+    version: 4.8.0
+  - apiVersion: v2
+    appVersion: latest
     created: "2026-03-11T01:42:51.882834972Z"
     digest: f3612b3c2db2797e5287bbcd35908263dbe9fd590b3c315eb6d615e6f3f2472b
     name: docs
@@ -424,4 +433,4 @@ entries:
     urls:
     - https://suitenumerique.github.io/docs/docs-0.0.1.tgz
     version: 0.0.1
-generated: "2026-03-11T01:42:51.880729918Z"
+generated: "2026-03-17T01:39:49.730810812Z"
